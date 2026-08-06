@@ -12,3 +12,5 @@ npm-debug.log*
 .env
 .env.production
 .vercel
+# generated from another repo at build time
+src/components/generated/

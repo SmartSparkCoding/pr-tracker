@@ -18,6 +18,12 @@ At build time the site queries the GitHub API for anything it can find from the 
 unreachable or the links don't resolve, the site gracefully falls back to the frontmatter. Set a
 `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable to raise the GitHub API rate limit.
 
+The navbar is not duplicated here — `npm run build` downloads
+[`Navbar.astro` from the Personal-Website repo](https://github.com/SmartSparkCoding/Personal-Website/blob/main/src/components/Navbar.astro)
+into `src/components/generated/` (gitignored) and uses that file directly, so it stays in sync with
+the main site. Relative links are made absolute for the `pr.` subdomain and the self-linking
+"PR Tracker" item is dropped. If the fetch fails, a committed fallback navbar is used.
+
 ## Frontmatter
 
 | Field         | Type                | Required | Notes                                                          |

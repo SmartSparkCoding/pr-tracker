@@ -1,7 +1,9 @@
 ---
-import { fetchNavItems } from '../lib/nav';
-
-const navItems = await fetchNavItems();
+const navItems = [
+  { label: 'Home', href: 'https://jacob.navaratne.uk' },
+  { label: 'About', href: 'https://jacob.navaratne.uk/#about' },
+  { label: 'Portfolio', href: 'https://jacob.navaratne.uk/portfolio' },
+];
 const contactHref = 'https://jacob.navaratne.uk/#contact';
 ---
 
@@ -12,11 +14,7 @@ const contactHref = 'https://jacob.navaratne.uk/#contact';
       <ul>
         {navItems.map((item) => (
           <li>
-            <a
-              href={item.href}
-              target={item.external ? '_blank' : undefined}
-              rel={item.external ? 'noopener noreferrer' : undefined}
-            >{item.label}</a>
+            <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
           </li>
         ))}
       </ul>

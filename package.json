@@ -5,8 +5,9 @@
   "private": true,
   "description": "A personal tracker for Jacob's open-source pull requests, powered by markdown files.",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "fetch:navbar": "node scripts/fetch-navbar.mjs",
+    "dev": "npm run fetch:navbar && astro dev",
+    "build": "npm run fetch:navbar && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
