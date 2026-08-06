@@ -1,0 +1,23 @@
+{
+  "name": "pr-tracker",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A personal tracker for Jacob's open-source pull requests, powered by markdown files.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.8.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
+}

@@ -1,0 +1,46 @@
+---
+import { getBuildInfo } from '../lib/buildInfo';
+
+const build = getBuildInfo();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="https://jacob.navaratne.uk" class="footer-logo">Jacob Navaratne</a>
+        <p>PR Tracker — a running log of the pull requests I've opened while building things with technology, software and AI.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Explore</h3>
+          <a href="https://jacob.navaratne.uk">Home</a>
+          <a href="https://jacob.navaratne.uk/portfolio">Portfolio</a>
+          <a href="/">PR Tracker</a>
+          <a href="https://github.com/SmartSparkCoding/pr-tracker#how-it-works" target="_blank" rel="noopener noreferrer">How it works<span>↗</span></a>
+        </div>
+        <div class="footer-column">
+          <h3>Connect</h3>
+          <a href="https://github.com/smartsparkcoding" target="_blank" rel="noopener noreferrer">GitHub<span>↗</span></a>
+          <a href="mailto:jacob@navaratne.uk">Email<span>↗</span></a>
+          <a href="https://www.linkedin.com/in/jacob-navaratne-53a076405" target="_blank" rel="noopener noreferrer">LinkedIn<span>↗</span></a>
+          <a href="https://hackclub.enterprise.slack.com/team/U0AEYDUCLKF" target="_blank" rel="noopener noreferrer">Slack<span>↗</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Jacob Navaratne. All rights reserved.</p>
+      <div class="footer-meta">
+        <span>Built with {build.framework}</span>
+        <span class="footer-separator">·</span>
+        {build.commit ? (
+          <a href={build.commitUrl!} target="_blank" rel="noopener noreferrer" title={`View commit ${build.commit}`}>Commit {build.commit}</a>
+        ) : (
+          <span>Open source</span>
+        )}
+        <span class="footer-separator">·</span>
+        <span>Deployed {build.deployedAt}</span>
+      </div>
+    </div>
+  </div>
+</footer>

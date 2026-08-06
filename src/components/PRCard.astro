@@ -1,0 +1,45 @@
+---
+import StatusBadge from './StatusBadge.astro';
+import { formatDateTime, type EnrichedPr } from '../lib/prs';
+
+interface Props {
+  pr: EnrichedPr;
+}
+
+const { pr } = Astro.props;
+const href = `/pr/${pr.slug}`;
+---
+
+<article class="pr-card">
+  <a href={href} class="pr-card-inner">
+    <div class="pr-meta">
+      <span>{formatDateTime(pr.date, pr.time)}</span>
+      <span class="pr-badges">
+        <StatusBadge status={pr.status} featured={pr.featured} />
+      </span>
+    </div>
+    <h3>{pr.title}</h3>
+    <p class="pr-description">{pr.description}</p>
+    {pr.tags.length > 0 && (
+      <div class="pr-tags">
+        {pr.tags.map((tag) => <span>{tag}</span>)}
+      </div>
+    )}
+  </a>
+  <div class="pr-card-footer">
+    <div class="pr-repo">
+      {pr.repo?.avatarUrl ? (
+        <img src={pr.repo.avatarUrl} alt="" width="16" height="16" style="border-radius:50%" loading="lazy" />
+      ) : (
+        <span class="dot" style="width:7px;height:7px;border-radius:50%;background:var(--accent-hover)"></span>
+      )}
+      <span class="repo-name">
+        {pr.repo ? <a href={pr.repo.url} target="_blank" rel="noopener noreferrer">{pr.repo.fullName}</a> : pr.site}
+      </span>
+    </div>
+    <div class="pr-links">
+      <a href={href}>Details</a>
+      <a href={pr.prLink} target="_blank" rel="noopener noreferrer">View PR<span>↗</span></a>
+    </div>
+  </div>
+</article>

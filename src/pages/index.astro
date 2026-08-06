@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PRCard from '../components/PRCard.astro';
+import { getEnrichedPrs } from '../lib/prs';
+
+const prs = await getEnrichedPrs();
+const featured = prs.filter((pr) => pr.featured);
+const rest = prs.filter((pr) => !pr.featured);
+---
+
+<BaseLayout currentPath="/">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">PR Tracker</p>
+      <h1>Pull requests I've <span class="gradient-text">opened.</span></h1>
+      <p class="page-intro">
+        A running log of every pull request I've opened across the projects and sites I work on.
+        Each entry is powered by a single markdown file, with live status pulled straight from GitHub.
+      </p>
+    </div>
+  </section>
+
+  {
+    prs.length === 0 ? (
+      <section class="pr-section">
+        <div class="container">
+          <div class="empty-state">
+            <p>No pull requests tracked yet. Add a markdown file to get started.</p>
+          </div>
+        </div>
+      </section>
+    ) : (
+      <>
+        {
+          featured.length > 0 && (
+            <section class="pr-section">
+              <div class="container">
+                <div class="pr-section-heading">
+                  <div>
+                    <p class="eyebrow">Featured</p>
+                    <h2>Pinned pull requests</h2>
+                  </div>
+                  <p style="color:var(--text-muted);font-size:.9rem;margin:0">{featured.length} featured</p>
+                </div>
+                <div class="pr-grid">
+                  {featured.map((pr) => <PRCard pr={pr} />)}
+                </div>
+              </div>
+            </section>
+          )
+        }
+        {
+          rest.length > 0 && (
+            <section class="pr-section">
+              <div class="container">
+                <div class="pr-section-heading">
+                  <div>
+                    <p class="eyebrow">All PRs</p>
+                    <h2>Latest pull requests</h2>
+                  </div>
+                  <p style="color:var(--text-muted);font-size:.9rem;margin:0">{rest.length} total</p>
+                </div>
+                <div class="pr-grid">
+                  {rest.map((pr) => <PRCard pr={pr} />)}
+                </div>
+              </div>
+            </section>
+          )
+        }
+      </>
+    )
+  }
+</BaseLayout>

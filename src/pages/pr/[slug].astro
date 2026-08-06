@@ -1,0 +1,132 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import {
+  getEnrichedPrs,
+  formatDate,
+  formatDateTime,
+  formatFullDate,
+  formatCount,
+  type EnrichedPr,
+} from '../../lib/prs';
+
+export async function getStaticPaths() {
+  const prs = await getEnrichedPrs();
+  return prs.map((pr) => ({
+    params: { slug: pr.slug },
+    props: { pr },
+  }));
+}
+
+interface Props {
+  pr: EnrichedPr;
+}
+
+const { pr } = Astro.props;
+const { Content } = await render(pr.entry);
+---
+
+<BaseLayout
+  title={`${pr.title} — PR Tracker`}
+  description={pr.description}
+  currentPath="/pr"
+>
+  <section class="page-hero">
+    <div class="container">
+      <a href="/" class="back-link"><span>←</span> Back to all PRs</a>
+      <div class="detail-meta">
+        <span>Pull Request</span>
+        <span>{pr.site}</span>
+        <span>{formatDate(pr.date)}</span>
+      </div>
+      <h1>{pr.title}</h1>
+      <p class="page-intro">{pr.description}</p>
+      <div class="detail-actions">
+        <a href={pr.prLink} target="_blank" rel="noopener noreferrer" class="button button-primary">View pull request<span>↗</span></a>
+        <a href={pr.repoLink} target="_blank" rel="noopener noreferrer" class="button button-secondary">View repository<span>↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container detail-layout">
+      <div class="content">
+        {pr.body.trim() ? (
+          <Content />
+        ) : (
+          <p style="color:var(--text-muted)">No additional notes for this pull request.</p>
+        )}
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Status</h3>
+          <StatusBadge status={pr.status} featured={pr.featured} />
+          {
+            pr.statusSource === 'github' ? (
+              <p style="margin-top:12px;color:var(--text-muted);font-size:.8rem">Live from GitHub</p>
+            ) : (
+              <p style="margin-top:12px;color:var(--text-muted);font-size:.8rem">From entry metadata</p>
+            )
+          }
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Details</h3>
+          <ul>
+            <li><strong>Date</strong> — {formatDate(pr.date)}</li>
+            {pr.time && <li><strong>Time</strong> — {pr.time}</li>}
+            <li><strong>Applied to</strong> — {pr.site}</li>
+            {pr.github?.author && (
+              <li>
+                <strong>Author</strong> — <a href={pr.github.authorUrl ?? '#'} target="_blank" rel="noopener noreferrer">{pr.github.author}</a>
+              </li>
+            )}
+            {pr.github?.mergedAt && (
+              <li><strong>Merged</strong> — {formatFullDate(pr.github.mergedAt)}</li>
+            )}
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Repository</h3>
+          {pr.repo ? (
+            <>
+              <p class="sidebar-value"><a href={pr.repo.url} target="_blank" rel="noopener noreferrer">{pr.repo.fullName}</a></p>
+              {pr.repo.description && (
+                <p style="margin-top:8px">{pr.repo.description}</p>
+              )}
+              <ul style="margin-top:12px">
+                {pr.repo.language && <li><strong>Language</strong> — {pr.repo.language}</li>}
+                <li><strong>Stars</strong> — {formatCount(pr.repo.stars)}</li>
+                <li><strong>Forks</strong> — {formatCount(pr.repo.forks)}</li>
+              </ul>
+            </>
+          ) : (
+            <p class="sidebar-value"><a href={pr.repoLink} target="_blank" rel="noopener noreferrer">{pr.repoLink}</a></p>
+          )}
+        </div>
+
+        {
+          pr.tags.length > 0 && (
+            <div class="sidebar-section">
+              <h3>Tags</h3>
+              <div class="pr-tags">
+                {pr.tags.map((tag) => <span>{tag}</span>)}
+              </div>
+            </div>
+          )
+        }
+
+        <div class="sidebar-section">
+          <h3>Links</h3>
+          <ul>
+            <li><a href={pr.prLink} target="_blank" rel="noopener noreferrer">{pr.github ? `Pull request #${pr.github.number}` : 'Pull request'}↗</a></li>
+            <li><a href={pr.repoLink} target="_blank" rel="noopener noreferrer">Repository↗</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

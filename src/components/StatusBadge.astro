@@ -1,0 +1,21 @@
+---
+import { statusLabel, type EnrichedPr } from '../lib/prs';
+
+interface Props {
+  status: EnrichedPr['status'];
+  featured?: boolean;
+}
+
+const { status, featured = false } = Astro.props;
+---
+
+{
+  featured && (
+    <span class:list={['badge', 'badge-featured']}>
+      <span class="dot"></span>Featured
+    </span>
+  )
+}
+<span class:list={['badge', `badge-${status}`]}>
+  <span class="dot"></span>{statusLabel(status)}
+</span>
