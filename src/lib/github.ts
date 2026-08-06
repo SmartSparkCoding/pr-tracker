@@ -110,6 +110,46 @@ async function cachedFetchJson<T>(url: string): Promise<T | null> {
   }
 }
 
+export async function cachedFetchText(url: string): Promise<string | null> {
+  const key = cacheKey(url);
+  const now = Date.now();
+
+  if (memoryCache.has(key)) {
+    const cached = memoryCache.get(key);
+    return typeof cached === 'string' ? cached : null;
+  }
+
+  const disk = readDiskCache();
+  const hit = disk[key];
+  if (hit && now - hit.fetchedAt < CACHE_TTL_MS) {
+    memoryCache.set(key, hit.data);
+    return typeof hit.data === 'string' ? hit.data : null;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'pr-tracker' }, signal: controller.signal });
+    if (!res.ok) {
+      console.warn(`[github] ${res.status} for ${url}`);
+      memoryCache.set(key, null);
+      return null;
+    }
+    const text = await res.text();
+    memoryCache.set(key, text);
+    disk[key] = { data: text, fetchedAt: now };
+    writeDiskCache(disk);
+    return text;
+  } catch (err) {
+    console.warn(`[github] request failed for ${url}: ${err}`);
+    memoryCache.set(key, null);
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export function parseRepoLink(url: string): { owner: string; repo: string } | null {
   try {
     const u = new URL(url);

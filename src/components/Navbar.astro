@@ -1,0 +1,26 @@
+---
+import { fetchNavItems } from '../lib/nav';
+
+const navItems = await fetchNavItems();
+const contactHref = 'https://jacob.navaratne.uk/#contact';
+---
+
+<header class="site-header">
+  <div class="nav-container">
+    <a href="https://jacob.navaratne.uk" class="logo" aria-label="Jacob Navaratne home">Jacob Navaratne</a>
+    <nav aria-label="Main navigation">
+      <ul>
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <a href={contactHref} target="_blank" rel="noopener noreferrer" class="contact-link">Contact</a>
+  </div>
+</header>

@@ -411,7 +411,7 @@ nav a[aria-current='page'] {
 
 .page-intro {
   max-width: 650px;
-  margin: 0;
+  margin: 0 0 40px;
   font-size: clamp(1.1rem, 2vw, 1.35rem);
   line-height: 1.6;
 }
@@ -618,7 +618,6 @@ nav a[aria-current='page'] {
   gap: 12px;
   display: flex;
 }
-
 .content-section {
   padding: 100px 0 140px;
 }
@@ -752,6 +751,19 @@ nav a[aria-current='page'] {
 
 .sidebar-section li a:hover {
   color: var(--text-primary);
+}
+
+.sidebar-section .pr-tags {
+  gap: 8px;
+}
+
+.sidebar-section .pr-tags span {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+}
+
+.sidebar-section .badge {
+  margin-bottom: 4px;
 }
 
 .empty-state {
