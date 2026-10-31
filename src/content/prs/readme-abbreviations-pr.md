@@ -10,7 +10,7 @@ tags:
   - Hack Club
   - Updates
 featured: true
-status: "open"
+status: "merged"
 ---
 
 ## Summary of Changes
