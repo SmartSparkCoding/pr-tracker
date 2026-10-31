@@ -33,4 +33,3 @@ Screenshots below of the site working with the new feature:
 <img width="806" height="774" alt="image" src="https://github.com/user-attachments/assets/1dd9ce56-cf48-4d6a-9708-8280f3fb7ba0" />
 
 ^^ This is on the index route ('/') and is shown to be at the bottom of the list of expandable explanations, with it expanded. 
-![image](https://github.com/user-attachments/assets/4e017b8a-403a-4a88-bf43-0ea4ac9f6d24)
